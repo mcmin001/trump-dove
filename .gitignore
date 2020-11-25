@@ -15,9 +15,6 @@
 #忽略所有target目录
 target/
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
