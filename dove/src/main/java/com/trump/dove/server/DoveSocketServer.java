@@ -1,5 +1,6 @@
 package com.trump.dove.server;
 
+import com.trump.dove.common.utils.CloseResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +20,19 @@ public class DoveSocketServer implements Closeable {
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
 
+    /**
+     * construct
+     * @param ip DoveSocketServer IP
+     * @param port DoveSocketServer port
+     */
     public DoveSocketServer(String ip, int port){
         this.ip = ip;
         this.port = port;
     }
 
+    /**
+     * statr DoveSocketServer
+     */
     public void start(){
         try{
             selector = Selector.open();
@@ -38,15 +47,20 @@ public class DoveSocketServer implements Closeable {
         }
     }
 
+    /**
+     * close DoveSocketServer
+     * @throws IOException
+     */
     public void close() throws IOException {
         alive = false;
 
         if(null != selector){
             selector.close();
+            CloseResourceUtil.close(selector);
         }
 
         if(null != serverSocketChannel){
-            serverSocketChannel.close();
+            CloseResourceUtil.close(serverSocketChannel);
         }
 
         logger.info("Dove Socket Server has been closed !");
