@@ -1,5 +1,6 @@
 package com.trump.dove.server;
 
+import com.trump.dove.base.DoveBase;
 import com.trump.dove.common.utils.CloseResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +12,9 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
-public class DoveSocketServer implements Closeable {
+public class DoveSocketServer extends DoveBase implements Closeable {
     private static final Logger logger = LoggerFactory.getLogger(DoveSocketServer.class);
 
-    private volatile boolean alive;
     private String ip;
     private int port;
     private Selector selector;
@@ -40,7 +40,7 @@ public class DoveSocketServer implements Closeable {
             serverSocketChannel.socket().bind(new InetSocketAddress(ip, port));
             serverSocketChannel.configureBlocking(false);
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-            alive = true;
+            DoveBase.alive = true;
             logger.info("Dove Socket Server has been started success !");
         }catch (Exception e){
             logger.error(e.getMessage(), e);
@@ -52,7 +52,7 @@ public class DoveSocketServer implements Closeable {
      * @throws IOException
      */
     public void close() throws IOException {
-        alive = false;
+        DoveBase.alive = false;
 
         if(null != selector){
             selector.close();
