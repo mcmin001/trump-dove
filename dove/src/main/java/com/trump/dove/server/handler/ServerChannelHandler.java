@@ -15,6 +15,9 @@ import java.util.Set;
 public class ServerChannelHandler {
     private static final Logger logger = LoggerFactory.getLogger(ServerChannelHandler.class);
 
+    /**
+     * 服务端的selector
+     */
     private Selector selector;
 
     public ServerChannelHandler selector(Selector selector){
@@ -30,6 +33,7 @@ public class ServerChannelHandler {
                     continue;
                 }
 
+                //一个SelectionKey键表示了一个特定的通道对象和一个特定的选择器对象之间的注册关系
                 Set<SelectionKey> selectionKeySet = selector.selectedKeys();
                 Iterator<SelectionKey> iterator = selectionKeySet.iterator();
                 while (DoveBase.alive && iterator.hasNext()){
