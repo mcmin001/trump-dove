@@ -1,6 +1,6 @@
 package com.trump.dove.server.handler;
 
-import com.trump.dove.base.DoveBase;
+import com.trump.dove.server.ClientReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +9,6 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.Iterator;
-import java.util.Set;
 
 public class ServerChannelHandler {
     private static final Logger logger = LoggerFactory.getLogger(ServerChannelHandler.class);
@@ -26,23 +24,7 @@ public class ServerChannelHandler {
     }
 
     public void start(){
-        while (DoveBase.alive){
-            try {
-                int readyChannels = selector.select();
-                if(0 == readyChannels){
-                    continue;
-                }
-
-                //一个SelectionKey键表示了一个特定的通道对象和一个特定的选择器对象之间的注册关系
-                Set<SelectionKey> selectionKeySet = selector.selectedKeys();
-                Iterator<SelectionKey> iterator = selectionKeySet.iterator();
-                while (DoveBase.alive && iterator.hasNext()){
-                    SelectionKey key = iterator.next();
-                }
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
+        new ClientReceiver(selector).listen();
     }
 
     private void printSelectionKeyInfo(String msg, SelectionKey key){
