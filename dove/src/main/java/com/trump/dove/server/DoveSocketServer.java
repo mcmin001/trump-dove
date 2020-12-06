@@ -19,6 +19,7 @@ public class DoveSocketServer extends DoveBase implements Closeable {
     private int port;
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
+    private ClientReceiver clientReceiver;
 
     /**
      * construct
@@ -42,6 +43,9 @@ public class DoveSocketServer extends DoveBase implements Closeable {
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
             DoveBase.alive = true;
             logger.info("Dove Socket Server has been started success !");
+
+            clientReceiver = new ClientReceiver(selector);
+            clientReceiver.listen();
         }catch (Exception e){
             logger.error(e.getMessage(), e);
         }
@@ -61,6 +65,10 @@ public class DoveSocketServer extends DoveBase implements Closeable {
 
         if(null != serverSocketChannel){
             CloseResourceUtil.close(serverSocketChannel);
+        }
+
+        if(null != clientReceiver){
+            CloseResourceUtil.close(clientReceiver);
         }
 
         logger.info("Dove Socket Server has been closed !");

@@ -7,4 +7,8 @@ public class DoveException extends RuntimeException{
     public DoveException(String message, Throwable cause){
         super(message, cause);
     }
+
+    public DoveException(String message){
+        super(message);
+    }
 }

@@ -1,6 +1,7 @@
 package com.trump.dove.server;
 
 import com.trump.dove.base.DoveBase;
+import com.trump.dove.common.utils.CloseResourceUtil;
 import com.trump.dove.server.handler.ClientEventHandler;
 import com.trump.dove.server.queue.ClientEventQueue;
 import org.slf4j.Logger;
@@ -40,9 +41,6 @@ public class ClientReceiver implements Closeable {
                 Iterator<SelectionKey> iterator = selectionKeySet.iterator();
                 while (DoveBase.alive && iterator.hasNext()){
                     SelectionKey key = iterator.next();
-
-
-
                     iterator.remove();
                 }
             }while (DoveBase.alive);
@@ -54,13 +52,13 @@ public class ClientReceiver implements Closeable {
 
     private void processSelectKey(SelectionKey key){
         if(key.isValid() && key.isReadable()){
-            SocketChannel sc = (SocketChannel) key.channel();
-            clientEventQueue.addClient(new ClientEventHandler(sc));
+            clientEventQueue.addClient(new ClientEventHandler(key));
         }
     }
 
     @Override
     public void close() throws IOException {
         logger.info("ClientReceiver closed");
+        CloseResourceUtil.close(clientEventQueue);
     }
 }
