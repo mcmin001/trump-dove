@@ -11,4 +11,8 @@ public class DoveException extends RuntimeException{
     public DoveException(String message){
         super(message);
     }
+
+    public DoveException(Throwable e){
+        super(e);
+    }
 }

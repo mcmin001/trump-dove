@@ -10,4 +10,8 @@ public class SysConstants {
      * client socket port
      */
     public static final String CLIENT_SOCKET_PORT = "client.socket.port";
+    /**
+     * 系统默认字符编码
+     */
+    public static final String DEFAULT_ENCODE = "UTF-8";
 }
